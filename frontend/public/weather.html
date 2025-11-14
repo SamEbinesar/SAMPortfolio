@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather API Example</title>
+</head>
+<body>
+    <h1>Weather Information App</h1>
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="/vid.mp4" type="video/mp4">
+    </video>
+    
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="fetchWeather()">Get Weather</button>
+    <div id="weather-info"></div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            background: url('/moving.gif');
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 100vh; 
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 20px 0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #weather-info {
+            margin-top: 20px;
+            font-size: 18px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+    </style>
+    <script>
+        async function fetchWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'b58f25e0fb3d108ac13fe73aafc4c20e'; 
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+        
+                if (data.cod !== 200) {
+                    document.getElementById('weather-info').innerHTML = `Error: ${data.message}`;
+                    return;
+                }
+            
+                document.getElementById('weather-info').innerHTML = `
+                    <p><strong>City:</strong> ${data.name}</p>
+                    <p><strong>Temperature:</strong> ${data.main.temp}°C</p>
+                    <p><strong>Weather:</strong> ${data.weather[0].description}</p>
+                    <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+                    <p><strong>Wind Speed:</strong> ${data.wind.speed} m/s</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                document.getElementById('weather-info').innerHTML = 'Error fetching data. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
+
