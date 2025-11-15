@@ -30,9 +30,9 @@ const Contact = () => {
     setStatus({ submitting: true, success: false, error: '' })
 
     try {
-      // Use Vercel serverless function in production, localhost in development
-      const apiUrl = import.meta.env.DEV ? 'http://localhost:5000' : ''
-      const response = await fetch(`${apiUrl}/api/send-email`, {
+      // Use relative path for Vercel serverless function
+      // Works in production and with 'vercel dev' for local development
+      const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,9 +40,22 @@ const Contact = () => {
         body: JSON.stringify(formData),
       })
 
+      // Check if response is ok and has content
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(errorText || `Server error: ${response.status}`)
+      }
+
+      // Check if response has content before parsing JSON
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text()
+        throw new Error(text || 'Invalid response from server')
+      }
+
       const data = await response.json()
 
-      if (response.ok && data.success) {
+      if (data.success) {
         setStatus({ submitting: false, success: true, error: '' })
         setFormData({ name: '', email: '', message: '' })
         // Clear success message after 5 seconds
@@ -61,7 +74,7 @@ const Contact = () => {
       setStatus({ 
         submitting: false, 
         success: false, 
-        error: 'Network error. Please make sure the backend server is running.' 
+        error: 'Network error. Please check your connection and try again.' 
       })
     }
   }

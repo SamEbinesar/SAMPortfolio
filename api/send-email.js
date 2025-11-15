@@ -70,22 +70,34 @@ export default async function handler(req, res) {
       },
     });
 
+    // Escape HTML to prevent XSS
+    const escapeHtml = (text) => {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    };
+
     // Email content
     const mailOptions = {
       from: smtpUser,
       to: 'samebinesar2004@gmail.com',
-      subject: `Portfolio Contact Form - Message from ${name}`,
+      subject: `Portfolio Contact Form - Message from ${escapeHtml(name)}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #00d4ff; border-bottom: 2px solid #00d4ff; padding-bottom: 10px;">
             New Contact Form Submission
           </h2>
           <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong style="color: #16213e;">Name:</strong> ${name}</p>
-            <p><strong style="color: #16213e;">Email:</strong> ${email}</p>
+            <p><strong style="color: #16213e;">Name:</strong> ${escapeHtml(name)}</p>
+            <p><strong style="color: #16213e;">Email:</strong> ${escapeHtml(email)}</p>
             <p><strong style="color: #16213e;">Message:</strong></p>
-            <p style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px;">
-              ${message.replace(/\n/g, '<br>')}
+            <p style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px; white-space: pre-wrap;">
+              ${escapeHtml(message).replace(/\n/g, '<br>')}
             </p>
           </div>
           <p style="color: #666; font-size: 12px; margin-top: 20px;">

@@ -25,6 +25,9 @@ backend/.env
 backend/.env.local
 backend/.env.production
 
+# Local development server (not needed for Vercel)
+server.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
