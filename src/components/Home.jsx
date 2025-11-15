@@ -3,7 +3,7 @@ import './Home.css'
 const Home = () => {
   const downloadResume = () => {
     const link = document.createElement('a')
-    link.href = '/Resume_SAM (2).pdf'
+    link.href = '/SamRESUME.pdf'
     link.download = 'Sam_Ebinesar_Resume.pdf'
     document.body.appendChild(link)
     link.click()
