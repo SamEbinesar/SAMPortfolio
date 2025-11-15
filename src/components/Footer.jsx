@@ -45,7 +45,7 @@ const Footer = () => {
                 </div>
               </a>
               <a 
-                href="www.linkedin.com/in/samebinesar2004" 
+                href="https://www.linkedin.com/in/samebinesar2004" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-link linkedin"
