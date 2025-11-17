@@ -2,7 +2,7 @@ import './Projects.css'
 
 const Projects = () => {
   const openKSVEG = () => {
-    window.open('https://samebinesar.github.io/KSVEGETABLES.com/', '_blank')
+    window.open('https://ksvegetablesofficial.vercel.app/', '_blank')
   }
 
   const openTaskBuddy = () => {
